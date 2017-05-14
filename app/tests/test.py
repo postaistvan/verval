@@ -1,6 +1,7 @@
 from gpiozero import DistanceSensor
 import RPi.GPIO as GPIO
 import Adafruit_DHT
+
 GPIO.setmode(GPIO.BCM)
 import time
 
@@ -11,16 +12,16 @@ print temperature
 TRIG = 23
 ECHO = 24
 
-GPIO.setup(TRIG,GPIO.OUT)
-GPIO.setup(ECHO,GPIO.IN)
+GPIO.setup(TRIG, GPIO.OUT)
+GPIO.setup(ECHO, GPIO.IN)
 
 GPIO.output(TRIG, True)
 time.sleep(0.00001)
 pulse_start = time.time()
 GPIO.output(TRIG, False)
 
-while GPIO.input(ECHO)==0:
-	pulse_start = pulse_start
+while GPIO.input(ECHO) == 0:
+    pulse_start = pulse_start
 
 pulse_end = time.time()
 

@@ -1,25 +1,27 @@
 import requests
 
-#A Class for using the Dweet.io servers for data communication between devices
+
 class Dweet(object):
-    
-    #dweet root domain and endpoints
+    """
+    A Class for using the Dweet.io servers for data communication between devices
+    """
+
+    # dweet root domain and endpoints
     BASE_URL = "http://dweet.io/"
 
-    #creates a name for the thing dweeting.
-    #for anonymous or first time use.
-    #assigns a random dweet name to the thing.
-    DWEET = "{0}{1}".format(BASE_URL , "dweet?")
+    # creates a name for the thing dweeting.
+    # for anonymous or first time use.
+    # assigns a random dweet name to the thing.
+    DWEET = "{0}{1}".format(BASE_URL, "dweet?")
 
-    #dweet by thing name.
+    # dweet by thing name.
     DWEET_BY_NAME = "{0}{1}".format(BASE_URL, "dweet/for/{name}?")
 
-    #get latest dweets by name.
+    # get latest dweets by name.
     LATEST_DWEET = "{0}{1}".format(BASE_URL, "get/latest/dweet/for/{name}")
 
-    #get all dweets by name.
+    # get all dweets by name.
     ALL_DWEETS = "{0}{1}".format(BASE_URL, "get/dweets/for/{name}")
-    
 
     def dweet(self, data):
         """
@@ -39,9 +41,8 @@ class Dweet(object):
         """
         try:
             return requests.get(self.DWEET, params=data).json()
-        except requests.exceptions.ConnectionError, e:
+        except requests.exceptions.ConnectionError as e:
             raise e
-
 
     def dweet_by_name(self, name, data):
         """
@@ -61,11 +62,9 @@ class Dweet(object):
         """
         try:
             return requests.get(self.DWEET_BY_NAME.format(name=name),
-                            params=data).json()
-        except requests.exceptions.ConnectionError, e:
+                                params=data).json()
+        except requests.exceptions.ConnectionError as e:
             raise e
-        
-        
 
     def latest_dweet(self, name):
         """
@@ -76,19 +75,17 @@ class Dweet(object):
         """
         try:
             return requests.get(self.LATEST_DWEET.format(name=name)).json()
-        except requests.exceptions.ConnectionError, e:
+        except requests.exceptions.ConnectionError as e:
             raise e
-        
-    
-    
+
     def all_dweets(self, name):
         """
         Get dweets in last 24 hours by thing name.
         Dweet limit currently is 500 dweets.
         Returns dict type.
         Parameter name is a string type.
-        """ 
+        """
         try:
             return requests.get(self.ALL_DWEETS.format(name=name)).json()
-        except requests.exceptions.ConnectionError, e:
+        except requests.exceptions.ConnectionError as e:
             raise e
