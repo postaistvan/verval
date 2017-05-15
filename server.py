@@ -1,8 +1,9 @@
 import RPi.GPIO as GPIO
 import Adafruit_DHT
-import _mysql
-import MySQLdb as mdb
+#import _mysql
+#import MySQLdb as mdb
 import time
+import serial
 from datetime import datetime as dt
 import pytz
 import json
@@ -24,6 +25,9 @@ DB_PASSWORD = 'root'
 
 STR_HUMIDITY = 'Humidity'
 STR_TEMPERATURE = 'Temperature'
+STR_DISTANCE = 'Distance'
+
+ser = serial.Serial('/dev/ttyUSB0', 9600)
 
 dweet = Dweet()
 
@@ -79,8 +83,25 @@ def readDht():
 
 #Reads all the sensors
 def readSensors():
-    hum, temp = readDht()
-    return hum, temp
+	resp = ser.readline()
+	resp_splitted = resp.split(',')
+	
+	hum = 0
+	temp = 0
+	dist = 0
+	
+	list = []
+	for word in resp_splitted:
+		if word.find(':') != -1:
+			type, data = word.split(':', 1)
+			if type == STR_HUMIDITY:
+				hum = data
+			elif type == STR_TEMPERATURE:
+				temp = data
+			elif type == STR_DISTANCE:
+				dist = data
+				
+	return hum, temp, dist
 
 #Inserts the data into the database
 def insertDataIntoDatabase(hum, temp):
@@ -88,44 +109,39 @@ def insertDataIntoDatabase(hum, temp):
     insertDataBySensorID(DHT_TEMP_ID, temp)
 
 #Sends the sensor data to dweet.io and returns 'success' on success and 'failed' on failure
-def sendData(hum, temp):
+def sendData(hum, temp, dist):
 	try:
-		resp = dweet.dweet_by_name(name=DWEET_ID, data={STR_HUMIDITY : hum, STR_TEMPERATURE : temp})
+		resp = dweet.dweet_by_name(name=DWEET_ID, data={STR_HUMIDITY : hum, STR_TEMPERATURE : temp, STR_DISTANCE : dist})
 		resp_json = json.loads(json.dumps(resp))
 		return resp['this']
 	except requests.exceptions.ConnectionError:
 		return "Connection error"
 
 #Test method wichi will print the data, send it to dweet.io and print the result
-def test(hum, temp):
+def uploadToDweet(hum, temp, dist):
 	print "Sending"
 	print "\tHumidity: ", hum
 	print "\tTemperature: ", temp
-
-	resp = sendData(hum, temp)
+	print "\tDistance: ", dist
+	
+	resp = sendData(hum, temp, dist)
 	print "Result: " + resp + '\n'	
 
 #Loop which will read the sensors, save the data in databas and send it to dweet.io
 def mainLoop():
 
-	hum = 1
-	temp = 2
-
 	while True:
-		# hum, temp = readSensors()
+		hum, temp, dist = readSensors()
 		# insertDataIntoDatabase(hum, temp)
 		# sendData(hum, temp)
-		
-		hum = hum + 1
-		temp = temp + 2
-
-		test(hum, temp)
+		uploadToDweet(hum, temp, dist)
 		time.sleep(1)
 
 
 if __name__ == "__main__":
-	DHT_HUM_ID = getSensorTypeByName(STR_HUMIDITY)
-	DHT_TEMP_ID = getSensorTypeByName(STR_TEMPERATURE)
+#	DHT_HUM_ID = getSensorTypeByName(STR_HUMIDITY)
+#	DHT_TEMP_ID = getSensorTypeByName(STR_TEMPERATURE)
+#	DIST_ID = getSensorTypeByName(STR_DISTANCE)
 
 	#list = getSensorValuesByID(DHT_HUM_ID)
 	#for data in list:
