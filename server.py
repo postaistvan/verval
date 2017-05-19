@@ -1,11 +1,10 @@
 import RPi.GPIO as GPIO
 import Adafruit_DHT
-#import _mysql
-#import MySQLdb as mdb
+import _mysql
+import MySQLdb as mdb
 import time
 import serial
 from datetime import datetime as dt
-import pytz
 import json
 import requests
 from dweet import Dweet
@@ -70,10 +69,15 @@ def getSensorLastValueByID(id):
 #Insert received or sent messages in the database
 def insertDataBySensorID(id, value):
     cur,con=conn()
-    time = dt.now(pytz.utc)
     query = "INSERT INTO Datas (sensorTypeID,value, date) VALUES ('%s', '%s', NOW())" % (id,value)
     cur.execute(query)
     con.commit()
+    return
+
+def insertDataBySensorName(name, value):
+    print name + " " + value
+    id = getSensorTypeByName(name)
+    insertDataBySensorID(id,value)
     return
 
 #Reads the data from the DHT sensor
@@ -94,6 +98,7 @@ def readSensors():
 	for word in resp_splitted:
 		if word.find(':') != -1:
 			type, data = word.split(':', 1)
+			insertDataBySensorName(type, data)
 			if type == STR_HUMIDITY:
 				hum = data
 			elif type == STR_TEMPERATURE:
