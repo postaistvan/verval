@@ -1,0 +1,15 @@
+app/__init__.pyc
+app/src/__init__.pyc
+app/src/dweet.pyc
+app/src/server.pyc
+app/tests/test_conn.pyc
+app/tests/test_getSensorLastValueByID.pyc
+app/tests/test_getSensorTypeByName.pyc
+app/tests/test_getSensorValuesByID.pyc
+app/tests/test_insertDataBySensorID.pyc
+app/tests/test_insertDataBySensorName.pyc
+app/tests/test_insertDataIntoDatabase.pyc
+app/tests/test_readDht.pyc
+app/tests/test_readSensors.pyc
+venv/
+.idea/
