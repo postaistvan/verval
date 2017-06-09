@@ -1,10 +1,9 @@
 from gpiozero import DistanceSensor
 import RPi.GPIO as GPIO
 import Adafruit_DHT
-
-GPIO.setmode(GPIO.BCM)
 import time
 
+GPIO.setmode(GPIO.BCM)
 humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 22)
 print humidity
 print temperature

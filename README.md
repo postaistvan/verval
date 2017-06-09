@@ -1,7 +1,14 @@
-# VerVal #
-Verifikacio es Validacio projekt
+# Fluxuskondenzator #
 
-### Run test: ###
-* Pylint: ```pylint app/src``` 
-* Pytests: ```pytest app/tests```
+* Install requirements:    
+
+    ```$ pip install -r requirements.txt```
+
+* Run:
+    
+    ```$ python main.py```
+
+* Run UnitTest:
+
+    ```$ python -m unittest discover -s app/tests```
 

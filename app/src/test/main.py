@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from dweet import Dweet
+from app.src.dweet import Dweet
 
 if __name__ == "__main__":
     dweet = Dweet()

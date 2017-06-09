@@ -4,9 +4,8 @@ import requests
 class Dweet(object):
     """
     A Class for using the Dweet.io servers for data communication between devices
+    dweet root domain and endpoints
     """
-
-    # dweet root domain and endpoints
     BASE_URL = "http://dweet.io/"
 
     # creates a name for the thing dweeting.
@@ -41,7 +40,7 @@ class Dweet(object):
         """
         try:
             return requests.get(self.DWEET, params=data).json()
-        except requests.exceptions.ConnectionError as e:
+        except requests.exceptions.ConnectionError, e:
             raise e
 
     def dweet_by_name(self, name, data):
@@ -63,7 +62,7 @@ class Dweet(object):
         try:
             return requests.get(self.DWEET_BY_NAME.format(name=name),
                                 params=data).json()
-        except requests.exceptions.ConnectionError as e:
+        except requests.exceptions.ConnectionError, e:
             raise e
 
     def latest_dweet(self, name):
@@ -75,7 +74,7 @@ class Dweet(object):
         """
         try:
             return requests.get(self.LATEST_DWEET.format(name=name)).json()
-        except requests.exceptions.ConnectionError as e:
+        except requests.exceptions.ConnectionError, e:
             raise e
 
     def all_dweets(self, name):
@@ -87,5 +86,5 @@ class Dweet(object):
         """
         try:
             return requests.get(self.ALL_DWEETS.format(name=name)).json()
-        except requests.exceptions.ConnectionError as e:
+        except requests.exceptions.ConnectionError, e:
             raise e
