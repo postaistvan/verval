@@ -1,16 +1,18 @@
 from unittest import TestCase
 
-from app.src.server import readSensors
+from app.src.server import Sensor
 
 
 class TestReadSensors(TestCase):
-    response = readSensors()
 
     def test_readSensors_type(self):
-        self.assertEqual(type(TestReadSensors.response), tuple)
+        sensor = Sensor(database=None)
+        self.assertEqual(type(sensor.readSensors()), tuple)
 
     def test_readSensors_is_not_None(self):
-        self.assertTrue(TestReadSensors.response is not None)
+        sensor = Sensor(database=None)
+        self.assertTrue(sensor.readSensors() is not None)
 
     def test_readSensors_is_null(self):
-        self.assertTrue(TestReadSensors.response == (0, 0, 0))
+        sensor = Sensor(database=None)
+        self.assertTrue(sensor.readSensors() == (0, 0, 0))
